@@ -101,8 +101,9 @@ error in regression
 GradientDescent(X,Y,cost_function,derivative_cost_function,maxniter):
 Implement gradient descent algorithm to train linear regression Model given
 the following algorithm
+
 for i in range(0, numiter):
-# hyp=hypothesis=(theta,X)
+ # hyp=hypothesis=(theta,X)
 # loss= hyp.T-Y
 # Cost = sum(loss**2)/2.0*nexamples
 # print cost
