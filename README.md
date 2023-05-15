@@ -1,113 +1,72 @@
-# linear-regression-from-scratch
+# Linear Regression from Scratch
 
-Regression
+Regression is a method used to model a target value based on independent predictors. Linear regression is a type of regression analysis where there is a linear relationship between the independent variable(s) and dependent variable. The goal of linear regression is to find the best values for the coefficients, which results in the line that best fits the data.
 
-Regression is a method of modeling a target value based on
-independent predictors. This method is mostly used for forecasting and
-finding out cause and effect relationship between variables. Regression
-techniques mostly differ based on the number of independent variables and
-the type of relationship between the independent and dependent variables.
+## Concepts
 
-Linear Regression
+### Cost Function
 
-Simple linear regression is a type of regression analysis where the number of
-independent variables is one and there is a linear relationship between the
-independent(x) and dependent(y) variable. The line can be modeled based
-on the linear equation shown below.
+The cost function helps us to figure out the best possible values for the coefficients, which would provide the best fit line for the data points. Since we want the best values for the coefficients, we convert this search problem into a minimization problem where we would like to minimize the error between the predicted value and the actual value. We choose the Mean Squared Error(MSE) function to minimize the error difference between the predicted values and the ground truth. The MSE is calculated by summing the squared difference between the predicted and actual values over all data points and dividing by the total number of data points.
 
-y = theta0 + theta1 * x ## Linear Equation
+### Gradient Descent
 
-or
+The idea of gradient descent is that we start with some values for the coefficients and then we change these values iteratively to reduce the cost. Gradient descent helps us to update the coefficients. To update the coefficients, we take gradients from the cost function. To find these gradients, we take partial derivatives with respect to each coefficient.
 
-y = c + m* x ## Linear Equation
+## Algorithm
 
-The motive of the linear regression algorithm is to find the best values for m
-and c.( or theta0 and theta1) .
-Before moving on to the algorithm, let’s have a look at two important concepts
-you must know to better understand linear regression.
+1. Pick initial values of the coefficients randomly.
+2. Calculate the predicted value using the hypothesis of the line equation.
+3. Find the loss on your prediction.
+4. Find the rate of change of the error (using the derivative).
+5. Update the coefficients using the following equation: new coefficients = old coefficients - learning rate * derivative of the cost function.
+6. Repeat steps 2-5 until the termination criteria are met.
 
-1-Cost Function ( or Loss Function)
-The cost function helps us to figure out the best possible values for theta0
-and theta1 which would provide the best fit line for the data points. Since we
-want the best values for theta0 and theta1, we convert this search problem
-into a minimization problem where we would like to minimize the error
-between the predicted value and the actual value
+### Termination Criteria
 
-We choose the above function to minimize. The difference between the
-predicted values and ground truth measures the error difference. We square
-the error difference and sum over all data points and divide that value by the
-total number of data points. This provides the average squared error over all
-the data points. Therefore, this cost function is also known as the Mean
-Squared Error(MSE) function. Now, using this MSE function we are going to
-change the values of a_0 and a_1 such that the MSE value settles at the
-minima.
-2-Optimizer
-There are many optimizer in family of this type of algorithms but one of the
-most widely used optimizer is Gradient Descent
-Gradient Descent
-The next important concept needed to understand linear regression is
-gradient
-descent. The idea is that we start with some values for theta0 and theta1 and
-then we change these values iteratively to reduce the cost. Gradient descent
-helps us on how to change the values.
+1. After a certain number of iterations.
+2. When the value of the cost function between two iterations is less than a certain threshold.
 
-To draw an analogy, imagine a pit in the shape of U and you are standing at
-the topmost point in the pit and your objective is to reach the bottom of the pit.
-There is a catch, you can only take a discrete number of steps to reach the
-bottom. If you decide to take one step at a time you would eventually reach
-the bottom of the pit but this would take a longer time. If you choose to take
+## Implementation
 
-longer steps each time, you would reach sooner but, there is a chance that
-you could overshoot the bottom of the pit and not exactly at the bottom. In the
-gradient descent algorithm, the number of steps you take is the learning rate.
-This decides on how fast the algorithm converges to the minima
+To implement linear regression from scratch, we need to define the following functions:
 
-You may be wondering how to use gradient descent to update theta0 and
-theta1. To update theta0 and theta_1, we take gradients from the cost
-function. To find these gradients, we take partial derivatives with respect
-to theta0 and
-theta1.
+### `hyp(theta, X)`
 
-Algorithm:
-1) Pick initial values of thetas randomly
-2) Calculate Prediction, Using hypothesis of line equation
-3) Find Loss on your prediction
-4) Find Rate of change of error (Using Derivative)
-5) Update Thetas with following equation
+This function implements the hypothesis for the equation of the line.
 
-newThetas = OldThetas – alpa*(Derivatives of thetas)
+### `cost_function(theta, X, Y)`
 
-Termination Criteria
-1) At certain amount of iterations
-2) When value of cost function between 2 iterations are less than certain
-threshold like 0.01 etc.
+This function implements the cost function (Mean Squared Error) for linear regression training.
 
-Lab Task
+### `derivative_cost_function(theta, X, Y)`
 
-You need to implement Linear regression given the randomly generated
-data in python notebook.
-1) def hyp(theta, X): Implement hypothesis for equation of line.
+This function implements the derivative of the cost function (error function) to find the rate of change of error in regression.
 
-2) def cost_function(theta,X,Y): Implement cost function ( Mean Squared
-Error )
-for linear regression training
+### `GradientDescent(X, Y, cost_function, derivative_cost_function, max_iter)`
 
-3) def
-derivative_cost_function(theta,X,Y): Implement Derivative of cost function
-(error function ) to find rate of change of
-error in regression
+This function implements the gradient descent algorithm to train the linear regression model.
 
-4) def
-GradientDescent(X,Y,cost_function,derivative_cost_function,maxniter):
-Implement gradient descent algorithm to train linear regression Model given
-the following algorithm
+```python
+def GradientDescent(X, Y, cost_function, derivative_cost_function, max_iter):
+    # Initialize coefficients randomly
+    theta = np.random.rand(X.shape[1])
+    alpha = 0.01
+    for i in range(max_iter):
+        # Calculate the predicted value using the hypothesis of the line equation
+        hyp = np.dot(X, theta)
+        # Find the loss on your prediction
+        loss = hyp - Y
+        # Find the cost function
+        cost = cost_function(theta, X, Y)
+        # Find the rate of change of the error (using the derivative)
+        gradient = derivative_cost_function(theta, X, Y)
+        # Update the coefficients
+        theta = theta - alpha * gradient
+    return theta
+```
 
-for i in range(0, numiter):
- # hyp=hypothesis=(theta,X)
-# loss= hyp.T-Y
-# Cost = sum(loss**2)/2.0*nexamples
-# print cost
-# gradiants= loss.T . X.T / nexamples
+With the above functions, we can train a linear regression model on our dataset.
 
-theta = theta - alpha * gradient
-return theta
+## Conclusion
+
+In this article, we have learned about linear regression and its implementation from scratch. We have covered the concepts of cost function and gradient descent. We have also provided an implementation of linear regression in Python using NumPy.
